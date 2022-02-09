@@ -17,4 +17,31 @@ export async function register(req, res) {
   }
 }
 
+export async function login(req, res) {
+  const users = db.collection("users");
 
+  const { email, password } = req.body;
+
+  try {
+    const login = await users.findOne({ email });
+    const name = login.name;
+    const Authorized = bcrypt.compareSync(password, login.password);
+
+    if (!login) {
+      res.sendStatus(401);
+      return;
+    }
+
+    if (Authorized) {
+      const token = uuid();
+      await db.collection("session").insertOne({ token, idUser: login._id });
+      res.send({ name, token });
+
+      return;
+    }
+    res.sendStatus(401);
+  } catch (error) {
+    console.log(error);
+    res.sendStatus(500);
+  }
+}
