@@ -39,6 +39,7 @@ export async function login(req, res) {
 
       return;
     }
+    console.log("OK")
     res.sendStatus(401);
   } catch (error) {
     console.log(error);
