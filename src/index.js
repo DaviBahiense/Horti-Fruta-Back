@@ -9,6 +9,6 @@ app.use(cors());
 app.use(json());
 app.use(router);
 
-app.listen(process.env.PORT, () => {
+app.listen(process.env.MONGO_URI, () => {
   console.log("Server is listening on port " + process.env.PORT);
 });
