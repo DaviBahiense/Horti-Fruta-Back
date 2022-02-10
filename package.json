@@ -10,13 +10,12 @@
     "dotenv": "^16.0.0",
     "express": "^4.17.2",
     "joi": "^17.6.0",
-    "uuid": "^8.3.2"
-  },
-  "devDependencies": {
+    "uuid": "^8.3.2",
     "mongodb": "^4.3.1"
   },
   "scripts": {
     "start": "node ./src/index.js",
+    "vai": "npx nodemon ./src/app.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "repository": {
