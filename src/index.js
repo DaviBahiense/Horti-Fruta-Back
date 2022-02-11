@@ -9,7 +9,6 @@ app.use(cors());
 app.use(json());
 app.use(router);
 
-
 app.listen(process.env.PORT, () => {
-    console.log('Server is litening on port ' + process.env.PORT);
-  }) 
+  console.log("Server is litening on port " + process.env.PORT);
+});
