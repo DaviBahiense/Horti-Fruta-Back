@@ -3,7 +3,9 @@ import db from "../database.js";
 export async function mountCart(req, res) {
   const authorization = req.headers.authorization;
   const token = authorization?.replace("Bearer ", "");
-  const cart = req.body;
+
+  const cart = req.body.cart;
+  const total = req.body.total;
 
   if (!token) {
     return res.sendStatus(401);
@@ -32,6 +34,23 @@ export async function mountCart(req, res) {
         $push: { cart },
       }
     );
+    await db.collection("users").updateOne(
+      {
+        _id: user._id,
+      },
+      {
+        $unset: { total: "" },
+      }
+    );
+
+    await db.collection("users").updateOne(
+      {
+        _id: user._id,
+      },
+      {
+        $push: { total },
+      }
+    );
 
     res.sendStatus(201);
   } catch (error) {
@@ -46,7 +65,7 @@ export async function getCart(req, res) {
   try {
     const session = await db.collection("session").findOne({ token });
     const user = await db.collection("users").findOne({ _id: session.idUser });
-    res.send(user.cart);
+    res.send(user);
   } catch (error) {
     console.log(error);
   }
