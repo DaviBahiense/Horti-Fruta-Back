@@ -12,7 +12,7 @@ export async function placeOrder(req, res) {
 
   const baseDate = new Date();
 
-  const orderDate = `${baseDate.getMonth()}${baseDate.getDate()}${baseDate.getFullYear()}-${token.slice(
+  const orderDate = `${baseDate.getMonth()}${baseDate.getDate()}${baseDate.getFullYear()}${baseDate.getMilliseconds()}-${token.slice(
     -5
   )}`;
 
