@@ -21,11 +21,33 @@ export async function placeOrder(req, res) {
     await db.collection("currentOrders").insertOne({
       userId: userId,
       orderDetails: { items: orderItens, finalPrice: orderTotal },
-      orderNumer: orderDate,
+      orderNumber: orderDate,
     });
-    res
-      .status(200)
-      .send(`Pedido Enviado! O Número do seu pedido é ${orderDate}`);
+    res.status(200).send(orderDate);
+  } catch (error) {
+    res.sendStatus(500);
+  }
+}
+
+export async function getOrders(req, res) {
+  const authorization = req.headers.authorization;
+  const token = authorization?.replace("Bearer ", "");
+
+  const user = await db.collection("session").findOne({ token });
+  const userId = user.idUser;
+  try {
+    const orders = await db
+      .collection("currentOrders")
+      .find({ userId })
+      .toArray();
+
+    const ordersDetails = orders.map((order) => ({
+      orderNumber: order.orderNumber,
+      orderItens: order.orderDetails.items,
+      orderPrice: order.orderDetails.finalPrice,
+    }));
+
+    res.status(200).send(ordersDetails);
   } catch (error) {
     console.log(error);
     res.sendStatus(500);
